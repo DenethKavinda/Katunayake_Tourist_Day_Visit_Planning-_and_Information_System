@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katunayake Tourist Information & Day-Visit Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Background Image Slideshow Animation (Left to Right) */
+    .slideshow-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -10;
+      overflow: hidden;
+    }
+    .slide-track {
+      display: flex;
+      width: 400%;
+      height: 100%;
+      animation: slideLeftToRight 24s infinite ease-in-out;
+    }
+    .slide-track img {
+      width: 25%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9) contrast(1.05);
+    }
+    @keyframes slideLeftToRight {
+      0%, 20% { transform: translateX(0%); }
+      25%, 45% { transform: translateX(-25%); }
+      50%, 70% { transform: translateX(-50%); }
+      75%, 95% { transform: translateX(-75%); }
+      100% { transform: translateX(0%); }
+    }
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 30px -10px rgba(13, 148, 136, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+  <!-- Background Image Slideshow -->
+  <div class="slideshow-container">
+    <div class="slide-track">
+      <img src="https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1920&q=80" alt="Katunayake Coastal Lagoon">
+      <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1920&q=80" alt="Muthurajawela Marshlands">
+      <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1920&q=80" alt="Negombo Beach Coastline">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80" alt="Hamilton Canal Waterways">
+    </div>
+  </div>
+
+  <!-- Shared Navigation Bar -->
+  <header class="sticky top-0 z-50 glass-nav shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white font-bold text-xl shadow-md">
+            K
+          </div>
+          <div>
+            <span class="text-xl font-black tracking-tight text-slate-900">Katunayake<span class="text-teal-600">Tourist</span></span>
+            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-widest">Day-Visit Explorer</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="index.html" class="px-4 py-2 text-sm font-bold text-teal-700 bg-teal-50 rounded-lg flex items-center gap-2">
+            <i class="fa-solid fa-compass"></i> Places Listing
+          </a>
+          <a href="mapView.html" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-teal-600 hover:bg-slate-100 rounded-lg flex items-center gap-2 transition">
+            <i class="fa-solid fa-map-location-dot"></i> Map View
+          </a>
+          <a href="visitPlanBuilder.html" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-teal-600 hover:bg-slate-100 rounded-lg flex items-center gap-2 transition relative">
+            <i class="fa-solid fa-route"></i> Visit Plan Builder
+            <span id="planBadge" class="hidden bg-teal-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+          </a>
+        </nav>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="md:hidden">
+          <button id="mobileMenuBtn" class="text-slate-600 hover:text-teal-600 focus:outline-none p-2">
+            <i class="fa-solid fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white/95 border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+      <a href="index.html" class="block px-3 py-2 text-base font-bold text-teal-700 bg-teal-50 rounded-md">Places Listing</a>
+      <a href="mapView.html" class="block px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-100 rounded-md">Map View</a>
+      <a href="visitPlanBuilder.html" class="block px-3 py-2 text-base font-semibold text-slate-700 hover:bg-slate-100 rounded-md">Visit Plan Builder</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Hero Banner -->
+    <div class="glass-card rounded-3xl p-8 mb-8 border border-white/60">
+      <div class="max-w-3xl">
+        <span class="inline-block px-3 py-1 bg-teal-100 text-teal-800 font-semibold text-xs uppercase tracking-wider rounded-full mb-3">Within 25 km Radius of Katunayake</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">Discover Katunayake's Finest Day-Visit Destinations</h1>
+        <p class="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">Explore 10 verified tourist attractions near Bandaranaike International Airport. Filter places, review details, and curate your custom 1-day travel plan easily.</p>
+        
+        <!-- Filter Controls -->
+        <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-200/80" id="filterContainer">
+          <button onclick="filterCategory('All')" class="filter-btn active px-4 py-2 text-xs font-bold rounded-xl bg-teal-600 text-white shadow-sm hover:bg-teal-700 transition">All Attractions</button>
+          <button onclick="filterCategory('Nature & Wildlife')" class="filter-btn px-4 py-2 text-xs font-bold rounded-xl bg-white/80 text-slate-700 border border-slate-200 hover:bg-teal-50 transition">Nature & Wildlife</button>
+          <button onclick="filterCategory('Culture & Heritage')" class="filter-btn px-4 py-2 text-xs font-bold rounded-xl bg-white/80 text-slate-700 border border-slate-200 hover:bg-teal-50 transition">Culture & Heritage</button>
+          <button onclick="filterCategory('Beach & Coastal')" class="filter-btn px-4 py-2 text-xs font-bold rounded-xl bg-white/80 text-slate-700 border border-slate-200 hover:bg-teal-50 transition">Beach & Coastal</button>
+          <button onclick="filterCategory('History & Architecture')" class="filter-btn px-4 py-2 text-xs font-bold rounded-xl bg-white/80 text-slate-700 border border-slate-200 hover:bg-teal-50 transition">History & Architecture</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Places Grid -->
+    <div id="placesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Places rendered dynamically via JavaScript -->
+    </div>
+  </main>
+
+  <!-- Shared Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-10 mt-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left sm:flex sm:items-center sm:justify-between">
+      <div>
+        <span class="text-lg font-bold text-white">Katunayake Tourist Information System</span>
+        <p class="text-xs text-slate-500 mt-1">Consolidated & verified local tourism data within a 25 km radius of CMB Airport.</p>
+      </div>
+      <div class="mt-4 sm:mt-0 text-xs text-slate-500">
+        &copy; 2026 Katunayake Tourism Board. Non-commercial day-trip planning system.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Shared Data & Logic Script -->
+  <script src="/js/data.js"></script>
+  <script>
+    let activeCat = 'All';
+
+    function renderPlaces() {
+      const grid = document.getElementById('placesGrid');
+      grid.innerHTML = '';
+      
+      const filtered = activeCat === 'All' 
+        ? placesData 
+        : placesData.filter(p => p.category === activeCat);
+
+      filtered.forEach(place => {
+        const isInPlan = isPlaceInPlan(place.id);
+        const card = document.createElement('div');
+        card.className = "glass-card rounded-2xl overflow-hidden border border-white/80 flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="relative h-48 overflow-hidden">
+              <img src="${place.image}" alt="${place.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+              <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-slate-800 text-xs font-extrabold px-3 py-1 rounded-full shadow-sm">
+                <i class="fa-solid fa-location-dot text-teal-600 mr-1"></i>${place.distanceKm} km from CMB
+              </span>
+              <span class="absolute top-3 right-3 bg-teal-600/90 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                ${place.category}
+              </span>
+            </div>
+            <div class="p-5">
+              <h3 class="text-xl font-extrabold text-slate-900 mb-2">${place.name}</h3>
+              <p class="text-slate-600 text-xs line-clamp-2 leading-relaxed mb-4">${place.description}</p>
+              
+              <div class="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-600 mb-4">
+                <div><i class="fa-regular fa-clock text-teal-600 mr-1"></i><strong>Hours:</strong> ${place.hours}</div>
+                <div><i class="fa-solid fa-ticket text-teal-600 mr-1"></i><strong>Fee:</strong> ${place.fee}</div>
+                <div class="col-span-2"><i class="fa-solid fa-hourglass-half text-teal-600 mr-1"></i><strong>Duration:</strong> ${place.duration}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-5 pt-0 flex items-center justify-between gap-2 border-t border-slate-100/80 mt-auto">
+            <a href="placeDetails.html?id=${place.id}" class="flex-1 py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl text-center transition">
+              <i class="fa-solid fa-circle-info mr-1"></i> Details
+            </a>
+            <button onclick="togglePlan(${place.id})" class="flex-1 py-2.5 px-3 ${isInPlan ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100' : 'bg-teal-600 text-white hover:bg-teal-700'} text-xs font-bold rounded-xl text-center transition flex items-center justify-center gap-1">
+              <i class="fa-solid ${isInPlan ? 'fa-minus' : 'fa-plus'}"></i> ${isInPlan ? 'Remove Plan' : 'Add to Plan'}
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCategory(cat) {
+      activeCat = cat;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.innerText.includes(cat) || (cat==='All' && btn.innerText.includes('All'))) {
+          btn.className = "filter-btn active px-4 py-2 text-xs font-bold rounded-xl bg-teal-600 text-white shadow-sm transition";
+        } else {
+          btn.className = "filter-btn px-4 py-2 text-xs font-bold rounded-xl bg-white/80 text-slate-700 border border-slate-200 hover:bg-teal-50 transition";
+        }
+      });
+      renderPlaces();
+    }
+
+    function togglePlan(id) {
+      let plan = getStoredPlan();
+      if (plan.includes(id)) {
+        plan = plan.filter(item => item !== id);
+      } else {
+        plan.push(id);
+      }
+      savePlan(plan);
+      renderPlaces();
+      updatePlanBadge();
+    }
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderPlaces();
+      updatePlanBadge();
+    });
+  </script>
+</body>
+</html>

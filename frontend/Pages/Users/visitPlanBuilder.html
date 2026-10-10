@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visit Plan Builder - Katunayake Tourist System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .slideshow-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -10; overflow: hidden;
+    }
+    .slide-track {
+      display: flex; width: 400%; height: 100%;
+      animation: slideLeftToRight 24s infinite ease-in-out;
+    }
+    .slide-track img { width: 25%; height: 100%; object-fit: cover; filter: brightness(0.9); }
+    @keyframes slideLeftToRight {
+      0%, 20% { transform: translateX(0%); }
+      25%, 45% { transform: translateX(-25%); }
+      50%, 70% { transform: translateX(-50%); }
+      75%, 95% { transform: translateX(-75%); }
+      100% { transform: translateX(0%); }
+    }
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
+    .glass-card { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+  <!-- Background Image Slideshow -->
+  <div class="slideshow-container">
+    <div class="slide-track">
+      <img src="https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1920&q=80" alt="Katunayake Lagoon">
+      <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1920&q=80" alt="Muthurajawela">
+      <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1920&q=80" alt="Negombo Beach">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80" alt="Hamilton Canal">
+    </div>
+  </div>
+
+  <!-- Shared Navigation Bar -->
+  <header class="sticky top-0 z-50 glass-nav shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white font-bold text-xl shadow-md">K</div>
+          <div>
+            <span class="text-xl font-black tracking-tight text-slate-900">Katunayake<span class="text-teal-600">Tourist</span></span>
+            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-widest">Day-Visit Explorer</span>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="index.html" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-teal-600 hover:bg-slate-100 rounded-lg flex items-center gap-2 transition">
+            <i class="fa-solid fa-compass"></i> Places Listing
+          </a>
+          <a href="mapView.html" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-teal-600 hover:bg-slate-100 rounded-lg flex items-center gap-2 transition">
+            <i class="fa-solid fa-map-location-dot"></i> Map View
+          </a>
+          <a href="visitPlanBuilder.html" class="px-4 py-2 text-sm font-bold text-teal-700 bg-teal-50 rounded-lg flex items-center gap-2 relative">
+            <i class="fa-solid fa-route"></i> Visit Plan Builder
+            <span id="planBadge" class="hidden bg-teal-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="glass-card rounded-3xl p-6 sm:p-8 mb-8 border border-white/80 shadow-md flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">My 1-Day Visit Itinerary</h1>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1">Review and organize your selected attractions into a smooth schedule.</p>
+      </div>
+      <button onclick="clearPlan()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-xl text-xs transition border border-red-200 flex items-center gap-2">
+        <i class="fa-solid fa-trash"></i> Clear All Items
+      </button>
+    </div>
+
+    <div id="planList" class="space-y-4">
+      <!-- Plan Items rendered dynamically -->
+    </div>
+  </main>
+
+  <footer class="bg-slate-900 text-slate-400 py-8 mt-12 border-t border-slate-800 text-center text-xs">
+    &copy; 2026 Katunayake Tourism Board.
+  </footer>
+
+  <script src="/js/data.js"></script>
+  <script>
+    function renderPlan() {
+      const listContainer = document.getElementById('planList');
+      const planIds = getStoredPlan();
+      const planItems = placesData.filter(p => planIds.includes(p.id));
+
+      if (planItems.length === 0) {
+        listContainer.innerHTML = `
+          <div class="glass-card rounded-3xl p-12 text-center border border-white/80">
+            <i class="fa-solid fa-route text-5xl text-slate-300 mb-4"></i>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Your Visit Plan is Empty</h3>
+            <p class="text-slate-500 text-sm mb-6">Explore our attraction catalog and add places to build your 1-day itinerary.</p>
+            <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-bold rounded-xl text-xs shadow-md hover:bg-teal-700 transition">
+              <i class="fa-solid fa-plus"></i> Browse Places Now
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = '';
+      planItems.forEach((place, index) => {
+        const item = document.createElement('div');
+        item.className = "glass-card rounded-2xl p-5 border border-white/80 shadow-sm flex flex-col sm:flex-row items-center gap-5";
+        item.innerHTML = `
+          <div class="w-10 h-10 rounded-full bg-teal-600 text-white font-black flex items-center justify-center shrink-0">
+            ${index + 1}
+          </div>
+          <img src="${place.image}" alt="${place.name}" class="w-full sm:w-28 h-24 object-cover rounded-xl shrink-0">
+          <div class="flex-grow">
+            <span class="text-xs font-bold text-teal-600">${place.category}</span>
+            <h3 class="text-lg font-extrabold text-slate-900">${place.name}</h3>
+            <p class="text-xs text-slate-500 mt-1"><i class="fa-regular fa-clock mr-1"></i> ${place.hours} &bull; <i class="fa-solid fa-hourglass-half ml-2 mr-1"></i> ${place.duration}</p>
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <a href="placeDetails.html?id=${place.id}" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">
+              <i class="fa-solid fa-circle-info"></i> Details
+            </a>
+            <button onclick="removeFromPlan(${place.id})" class="p-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold transition">
+              <i class="fa-solid fa-trash"></i> Remove
+            </button>
+          </div>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    function removeFromPlan(id) {
+      let plan = getStoredPlan();
+      plan = plan.filter(item => item !== id);
+      savePlan(plan);
+      renderPlan();
+      updatePlanBadge();
+    }
+
+    function clearPlan() {
+      if (confirm("Are you sure you want to clear your entire itinerary?")) {
+        savePlan([]);
+        renderPlan();
+        updatePlanBadge();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderPlan();
+      updatePlanBadge();
+    });
+  </script>
+</body>
+</html>
