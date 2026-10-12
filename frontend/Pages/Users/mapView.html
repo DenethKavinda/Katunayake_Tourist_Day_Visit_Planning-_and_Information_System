@@ -74,7 +74,7 @@
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="glass-card rounded-3xl p-6 mb-6 border border-white/80">
       <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Interactive Map View</h1>
-      <p class="text-xs sm:text-sm text-slate-600 mt-1">Explore all 10 verified places around Katunayake airport (CMB) plotted accurately on the map.</p>
+      <p class="text-xs sm:text-sm text-slate-600 mt-1">Explore all verified places around Katunayake airport (CMB) plotted accurately on the map.</p>
     </div>
 
     <div class="glass-card rounded-3xl p-4 border border-white/80 shadow-lg">
@@ -88,7 +88,8 @@
 
   <script src="/js/data.js"></script>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadPlacesData();
       updatePlanBadge();
 
       // Initialize OpenStreetMap via Leaflet

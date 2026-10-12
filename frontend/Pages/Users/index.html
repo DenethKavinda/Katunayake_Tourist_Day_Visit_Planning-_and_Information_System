@@ -114,7 +114,7 @@
       <div class="max-w-3xl">
         <span class="inline-block px-3 py-1 bg-teal-100 text-teal-800 font-semibold text-xs uppercase tracking-wider rounded-full mb-3">Within 25 km Radius of Katunayake</span>
         <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">Discover Katunayake's Finest Day-Visit Destinations</h1>
-        <p class="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">Explore 10 verified tourist attractions near Bandaranaike International Airport. Filter places, review details, and curate your custom 1-day travel plan easily.</p>
+        <p class="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">Explore verified tourist attractions near Bandaranaike International Airport. Filter places, review details, and curate your custom 1-day travel plan easily.</p>
         
         <!-- Filter Controls -->
         <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-200/80" id="filterContainer">
@@ -158,6 +158,11 @@
       const filtered = activeCat === 'All' 
         ? placesData 
         : placesData.filter(p => p.category === activeCat);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full glass-card rounded-2xl p-8 text-center text-slate-500">No attractions found in this category.</div>`;
+        return;
+      }
 
       filtered.forEach(place => {
         const isInPlan = isPlaceInPlan(place.id);
@@ -227,7 +232,8 @@
       document.getElementById('mobileMenu').classList.toggle('hidden');
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadPlacesData();
       renderPlaces();
       updatePlanBadge();
     });
