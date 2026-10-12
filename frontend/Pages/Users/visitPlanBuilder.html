@@ -152,7 +152,8 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadPlacesData();
       renderPlan();
       updatePlanBadge();
     });

@@ -84,11 +84,10 @@
 
   <script src="/js/data.js"></script>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const placeId = parseInt(urlParams.get('id')) || 1;
-    const place = placesData.find(p => p.id === placeId) || placesData[0];
+    let currentPlace = null;
 
-    function renderDetails() {
+    function renderDetails(place) {
+      currentPlace = place;
       const container = document.getElementById('detailsContainer');
       const isInPlan = isPlaceInPlan(place.id);
 
@@ -128,7 +127,7 @@
           <div>
             <h2 class="text-lg font-extrabold text-slate-900 mb-2">Traveler Tips</h2>
             <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-2xl text-xs sm:text-sm text-amber-900 leading-relaxed">
-              <i class="fa-solid fa-lightbulb text-amber-600 mr-2"></i> ${place.tips}
+              <i class="fa-solid fa-lightbulb text-amber-600 mr-2"></i> ${place.tips || 'Plan your visit ahead and carry local currency for admission.'}
             </div>
           </div>
 
@@ -152,12 +151,19 @@
         plan.push(id);
       }
       savePlan(plan);
-      renderDetails();
+      renderDetails(currentPlace);
       updatePlanBadge();
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      renderDetails();
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadPlacesData();
+      const urlParams = new URLSearchParams(window.location.search);
+      const placeId = parseInt(urlParams.get('id')) || (placesData[0] ? placesData[0].id : 1);
+      const place = placesData.find(p => p.id === placeId) || placesData[0];
+
+      if (place) {
+        renderDetails(place);
+      }
       updatePlanBadge();
     });
   </script>
