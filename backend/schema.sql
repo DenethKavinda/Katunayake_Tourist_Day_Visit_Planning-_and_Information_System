@@ -25,6 +25,20 @@ CREATE TABLE IF NOT EXISTS places (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS settings (
+  setting_key VARCHAR(100) PRIMARY KEY,
+  setting_value TEXT NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO settings (setting_key, setting_value) VALUES
+('brand_title', 'Katunayake Tourist'),
+('brand_subtitle', 'Day-Visit Explorer'),
+('footer_title', 'Katunayake Tourist Information System'),
+('footer_description', 'Consolidated & verified local tourism data within a 25 km radius of CMB Airport.'),
+('footer_copyright', '© 2026 Katunayake Tourism Board. All rights reserved.')
+ON DUPLICATE KEY UPDATE setting_key = VALUES(setting_key);
+
 -- Seed initial 10 verified locations around Katunayake CMB Airport
 INSERT INTO places (name, category, distanceKm, description, hours, fee, duration, tips, lat, lng, image) VALUES
 ('Muthurajawela Marsh & Boat Safari', 'Nature & Wildlife', 8.5, 'Sri Lanka’s largest saline coastal peat bog, offering scenic boat rides to observe waterbirds, monkeys, and crocodiles in pristine wetlands.', '06:00 AM - 06:00 PM', 'LKR 3,500 / Boat', '2 - 3 Hours', 'Early morning or late afternoon boat tours offer the best wildlife sightings and pleasant weather.', 7.0500, 79.8600, 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80'),
@@ -37,5 +51,3 @@ INSERT INTO places (name, category, distanceKm, description, hours, fee, duratio
 ('Dutch Fort Ruins Negombo', 'History & Architecture', 11.8, 'Remnants of a 17th-century fortification constructed by the Portuguese and Dutch, now situated near the Negombo lagoon mouth.', '08:00 AM - 05:00 PM', 'Free Entry', '45 Mins', 'Combine with a visit to the nearby Lellama fish market for a complete morning walk.', 7.2050, 79.8320, 'https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=800&q=80'),
 ('Guruge Nature Park', 'Nature & Wildlife', 14.5, 'Family theme park featuring replica ancient Sinhalese villages, dinosaur exhibits, water rides, and lush botanical gardens.', '09:00 AM - 06:00 PM', 'LKR 1,000 / Person', '2 - 3 Hours', 'Great for families with young children seeking recreational activities.', 7.0800, 79.9100, 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80'),
 ('Beddagana Wetland Park', 'Nature & Wildlife', 24.5, 'Protected wetland sanctuary featuring elevated wooden boardwalks across swamps, butterfly gardens, and birdwatching towers.', '06:00 AM - 06:00 PM', 'LKR 500 / Person', '2 Hours', 'Quiet walk environment; bring binoculars for spotting indigenous birds.', 6.8900, 79.9100, 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80');
-
-

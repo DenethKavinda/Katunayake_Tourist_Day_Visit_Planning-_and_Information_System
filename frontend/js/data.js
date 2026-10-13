@@ -38,3 +38,44 @@ function updatePlanBadge() {
     badge.classList.add("hidden");
   }
 }
+
+let siteSettings = {};
+
+// Fetch header/footer settings from MySQL API
+async function loadSiteSettings() {
+  try {
+    const res = await fetch("/api/settings");
+    if (!res.ok) throw new Error("Failed to load settings");
+    siteSettings = await res.json();
+    applyHeaderFooterSettings();
+    return siteSettings;
+  } catch (err) {
+    console.error("Error fetching site settings:", err);
+  }
+}
+
+// Dynamically update DOM elements across all public pages
+function applyHeaderFooterSettings() {
+  const brandTitleEl = document.getElementById("headerBrandTitle");
+  const brandSubtitleEl = document.getElementById("headerBrandSubtitle");
+  if (brandTitleEl && siteSettings.brand_title) {
+    brandTitleEl.textContent = siteSettings.brand_title;
+  }
+  if (brandSubtitleEl && siteSettings.brand_subtitle) {
+    brandSubtitleEl.innerText = siteSettings.brand_subtitle;
+  }
+
+  const footerTitleEl = document.getElementById("footerTitle");
+  const footerDescEl = document.getElementById("footerDescription");
+  const footerCopyEl = document.getElementById("footerCopyright");
+
+  if (footerTitleEl && siteSettings.footer_title) {
+    footerTitleEl.innerText = siteSettings.footer_title;
+  }
+  if (footerDescEl && siteSettings.footer_description) {
+    footerDescEl.innerText = siteSettings.footer_description;
+  }
+  if (footerCopyEl && siteSettings.footer_copyright) {
+    footerCopyEl.innerText = siteSettings.footer_copyright;
+  }
+}

@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
-    // Authentication Guard
     const token = localStorage.getItem('adminToken');
     if (!token) {
       window.location.href = '/admin/login.html';
@@ -24,24 +23,18 @@
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
 
-  <!-- Main Container with Sidebar & Content -->
   <div class="flex-grow flex flex-col md:flex-row">
-
-    <!-- 1. Left Sidebar Navigation -->
+    <!-- Left Sidebar -->
     <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex-shrink-0 flex flex-col justify-between">
       <div>
-        <!-- Brand Header -->
         <div class="h-20 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white font-black text-xl shadow-md mr-3">
-            K
-          </div>
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white font-black text-xl shadow-md mr-3">K</div>
           <div>
             <span class="text-base font-extrabold text-white tracking-tight block leading-tight">Katunayake<span class="text-teal-400">Admin</span></span>
             <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest block">Management System</span>
           </div>
         </div>
 
-        <!-- Navigation Links -->
         <nav class="p-4 space-y-2">
           <button onclick="switchTab('places')" id="btn-places" class="nav-btn active w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium text-sm rounded-xl border border-transparent transition text-left">
             <i class="fa-solid fa-map-location-dot text-base w-5"></i>
@@ -57,26 +50,21 @@
             <i class="fa-solid fa-shoe-prints text-base w-5"></i>
             <span>Footer Settings</span>
           </button>
+
         </nav>
       </div>
 
-      <!-- System Access Card -->
       <div class="p-4 m-4 rounded-xl bg-slate-800/50 border border-slate-800 text-xs text-slate-400">
         <p class="font-bold text-slate-300 mb-1"><i class="fa-solid fa-shield-halved text-teal-400 mr-1"></i> Role-Based Access</p>
-        <p class="text-[11px] leading-relaxed">Logged in as system administrator. Actions directly update MySQL database.</p>
+        <p class="text-[11px] leading-relaxed">Logged in as administrator. Changes write to MySQL database.</p>
       </div>
     </aside>
 
-    <!-- 2. Right Main Workspace -->
+    <!-- Right Workspace -->
     <div class="flex-1 flex flex-col min-w-0">
-
-      <!-- Top Header Bar -->
       <header class="h-20 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm sticky top-0 z-10">
-        <div>
-          <h1 id="pageTitle" class="text-xl font-extrabold text-slate-900 tracking-tight">Tourist Attractions Dashboard</h1>
-        </div>
+        <h1 id="pageTitle" class="text-xl font-extrabold text-slate-900 tracking-tight">Tourist Attractions Dashboard</h1>
 
-        <!-- Admin Profile & Logout Button -->
         <div class="flex items-center gap-4">
           <div class="hidden sm:flex items-center gap-3 border-r border-slate-200 pr-4">
             <div class="w-9 h-9 rounded-full bg-teal-100 text-teal-700 font-bold flex items-center justify-center text-sm border border-teal-200">
@@ -87,30 +75,25 @@
               <span class="block text-[10px] font-semibold text-slate-400">admin@katunayake.lk</span>
             </div>
           </div>
-
-          <!-- Logout Button -->
           <button onclick="logout()" class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl border border-red-200 transition flex items-center gap-2">
             <i class="fa-solid fa-right-from-bracket"></i> Log Out
           </button>
         </div>
       </header>
 
-      <!-- Main Workspace -->
       <main class="flex-1 p-6 max-w-7xl w-full mx-auto">
-
-        <!-- Tab 1: Places Management View -->
+        <!-- Tab 1: Places Management -->
         <div id="view-places" class="tab-content space-y-6">
           <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-wrap justify-between items-center gap-4">
             <div>
               <h2 class="text-lg font-bold text-slate-900">Manage Katunayake Day-Visit Attractions</h2>
-              <p class="text-xs text-slate-500 mt-1">Add, update, or remove tourism places stored in your MySQL database within 25 km of CMB Airport.</p>
+              <p class="text-xs text-slate-500 mt-1">Add, update, or remove tourism destinations within 25 km of CMB Airport.</p>
             </div>
             <button onclick="openModal()" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-2">
               <i class="fa-solid fa-plus"></i> Add New Place
             </button>
           </div>
 
-          <!-- Places Table -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
               <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Registered Destinations</span>
@@ -128,56 +111,54 @@
                     <th class="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="placesTableBody" class="divide-y divide-slate-100">
-                  <!-- Rendered dynamically via JavaScript -->
-                </tbody>
+                <tbody id="placesTableBody" class="divide-y divide-slate-100"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- Tab 2: Header Settings View -->
+        <!-- Tab 2: Header Settings -->
         <div id="view-header" class="tab-content hidden space-y-6">
           <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
             <h2 class="text-lg font-bold text-slate-900 mb-1">Header Configuration</h2>
-            <p class="text-xs text-slate-500 mb-6">Customize the main website logo, title, and top menu labels.</p>
+            <p class="text-xs text-slate-500 mb-6">Customize website header title and subtitle.</p>
 
-            <form class="space-y-4 max-w-2xl">
+            <form id="headerSettingsForm" class="space-y-4 max-w-2xl">
               <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">System Brand Title</label>
-                <input type="text" value="Katunayake Tourist" class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+                <label class="block text-xs font-bold text-slate-700 mb-1">Brand Title</label>
+                <input type="text" id="setting_brand_title" required class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">Brand Subtitle</label>
-                <input type="text" value="Day-Visit Explorer" class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+                <input type="text" id="setting_brand_subtitle" required class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
               </div>
-              <button type="button" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
+              <button type="submit" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
                 Save Header Settings
               </button>
             </form>
           </div>
         </div>
 
-        <!-- Tab 3: Footer Settings View -->
+        <!-- Tab 3: Footer Settings -->
         <div id="view-footer" class="tab-content hidden space-y-6">
           <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
             <h2 class="text-lg font-bold text-slate-900 mb-1">Footer Configuration</h2>
-            <p class="text-xs text-slate-500 mb-6">Update site copyright message, descriptions, and footer details.</p>
+            <p class="text-xs text-slate-500 mb-6">Update site copyright message, description, and footer title.</p>
 
-            <form class="space-y-4 max-w-2xl">
+            <form id="footerSettingsForm" class="space-y-4 max-w-2xl">
               <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">Footer Title</label>
-                <input type="text" value="Katunayake Tourist Information System" class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+                <input type="text" id="setting_footer_title" required class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">Footer Description</label>
-                <textarea rows="3" class="w-full border border-slate-200 p-3 rounded-xl text-sm focus:outline-none focus:border-teal-600">Consolidated & verified local tourism data within a 25 km radius of CMB Airport.</textarea>
+                <textarea id="setting_footer_description" rows="3" required class="w-full border border-slate-200 p-3 rounded-xl text-sm focus:outline-none focus:border-teal-600"></textarea>
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">Copyright Notice</label>
-                <input type="text" value="© 2026 Katunayake Tourism Board. Non-commercial day-trip planning system." class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+                <input type="text" id="setting_footer_copyright" required class="w-full border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-teal-600">
               </div>
-              <button type="button" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
+              <button type="submit" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
                 Save Footer Settings
               </button>
             </form>
@@ -186,27 +167,19 @@
 
       </main>
 
-      <!-- 3. Admin Footer -->
       <footer class="bg-white border-t border-slate-200 py-4 px-6 text-center sm:flex sm:justify-between sm:items-center text-xs text-slate-500">
-        <div>
-          &copy; 2026 <span class="font-bold text-slate-700">Katunayake Tourism Board</span>. Internal Admin Panel.
-        </div>
-        <div class="mt-2 sm:mt-0 text-[11px] text-slate-400">
-          Logged in as <span class="font-semibold text-teal-600">Administrator</span>
-        </div>
+        <div>&copy; 2026 <span class="font-bold text-slate-700">Katunayake Tourism Board</span>. Internal Admin Panel.</div>
+        <div class="mt-2 sm:mt-0 text-[11px] text-slate-400">Logged in as <span class="font-semibold text-teal-600">Administrator</span></div>
       </footer>
-
     </div>
   </div>
 
-  <!-- Add / Edit Place Modal Form -->
+  <!-- Place Add/Edit Modal -->
   <div id="placeModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-3xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto shadow-2xl">
       <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
         <h3 id="modalTitle" class="text-lg font-extrabold text-slate-900">Add New Attraction</h3>
-        <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-slate-600">
-          <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
+        <button type="button" onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
       </div>
 
       <form id="placeForm" enctype="multipart/form-data" class="space-y-4">
@@ -216,11 +189,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Attraction Name</label>
-            <input type="text" id="pName" required class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <input type="text" id="pName" required class="w-full border px-3 py-2 rounded-xl text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Category</label>
-            <select id="pCategory" class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <select id="pCategory" class="w-full border px-3 py-2 rounded-xl text-sm">
               <option>Nature & Wildlife</option>
               <option>Beach & Coastal</option>
               <option>Culture & Heritage</option>
@@ -229,31 +202,30 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Distance from Airport (km)</label>
-            <input type="number" step="0.1" id="pDistance" required class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <input type="number" step="0.1" id="pDistance" required class="w-full border px-3 py-2 rounded-xl text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Opening Hours</label>
-            <input type="text" id="pHours" required placeholder="08:00 AM - 05:00 PM" class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <input type="text" id="pHours" required placeholder="08:00 AM - 05:00 PM" class="w-full border px-3 py-2 rounded-xl text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Latitude (lat)</label>
-            <input type="number" step="0.00000001" id="pLat" required placeholder="e.g. 7.18040000" class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <input type="number" step="0.00000001" id="pLat" required placeholder="e.g. 7.18040000" class="w-full border px-3 py-2 rounded-xl text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Longitude (lng)</label>
-            <input type="number" step="0.00000001" id="pLng" required placeholder="e.g. 79.88410000" class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <input type="number" step="0.00000001" id="pLng" required placeholder="e.g. 79.88410000" class="w-full border px-3 py-2 rounded-xl text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Entrance Fee</label>
-            <input type="text" id="pFee" required placeholder="Free Entry or LKR 1000" class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <input type="text" id="pFee" required placeholder="Free Entry or LKR 1000" class="w-full border px-3 py-2 rounded-xl text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Estimated Duration</label>
-            <input type="text" id="pDuration" required placeholder="1 - 2 Hours" class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+            <input type="text" id="pDuration" required placeholder="1 - 2 Hours" class="w-full border px-3 py-2 rounded-xl text-sm">
           </div>
         </div>
 
-        <!-- Image Selection Options -->
         <div class="border p-4 rounded-2xl bg-slate-50 space-y-3">
           <label class="block text-xs font-bold text-slate-700">Image Source Option</label>
           <div class="flex items-center gap-4 text-xs font-semibold text-slate-600">
@@ -266,27 +238,27 @@
           </div>
 
           <div id="urlInputContainer">
-            <input type="url" id="pImage" placeholder="https://images.unsplash.com/..." class="w-full border px-3 py-2 rounded-xl text-sm bg-white focus:outline-none focus:border-teal-600">
+            <input type="url" id="pImage" placeholder="https://images.unsplash.com/..." class="w-full border px-3 py-2 rounded-xl text-sm bg-white">
           </div>
 
           <div id="fileInputContainer" class="hidden">
-            <input type="file" id="pImageFile" accept="image/*" class="w-full border px-3 py-2 rounded-xl text-sm bg-white focus:outline-none focus:border-teal-600">
+            <input type="file" id="pImageFile" accept="image/*" class="w-full border px-3 py-2 rounded-xl text-sm bg-white">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Description</label>
-          <textarea id="pDescription" rows="3" required class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600"></textarea>
+          <textarea id="pDescription" rows="3" required class="w-full border px-3 py-2 rounded-xl text-sm"></textarea>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Traveler Tips</label>
-          <textarea id="pTips" rows="2" class="w-full border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-teal-600"></textarea>
+          <textarea id="pTips" rows="2" class="w-full border px-3 py-2 rounded-xl text-sm"></textarea>
         </div>
 
         <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-md transition">Save Attraction</button>
+          <button type="submit" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl">Save Attraction</button>
         </div>
       </form>
     </div>
@@ -331,6 +303,74 @@
       });
     }
 
+    async function loadAdminSettings() {
+      try {
+        const res = await fetch('/api/settings');
+        const settings = await res.json();
+
+        document.getElementById('setting_brand_title').value = settings.brand_title || '';
+        document.getElementById('setting_brand_subtitle').value = settings.brand_subtitle || '';
+        document.getElementById('setting_footer_title').value = settings.footer_title || '';
+        document.getElementById('setting_footer_description').value = settings.footer_description || '';
+        document.getElementById('setting_footer_copyright').value = settings.footer_copyright || '';
+      } catch (err) {
+        console.error('Error loading settings:', err);
+      }
+    }
+
+    document.getElementById('headerSettingsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await saveSettings({
+        brand_title: document.getElementById('setting_brand_title').value,
+        brand_subtitle: document.getElementById('setting_brand_subtitle').value
+      });
+    });
+
+    document.getElementById('footerSettingsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await saveSettings({
+        footer_title: document.getElementById('setting_footer_title').value,
+        footer_description: document.getElementById('setting_footer_description').value,
+        footer_copyright: document.getElementById('setting_footer_copyright').value
+      });
+    });
+
+    async function saveSettings(payload) {
+      const isFormData = payload instanceof FormData;
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert('Settings saved successfully!');
+      } else {
+        alert('Failed to save settings');
+      }
+    }
+
+    async function saveSettings(payload) {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const isFormData = payload instanceof FormData;
+      if (!isFormData) headers['Content-Type'] = 'application/json';
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers,
+        body: isFormData ? payload : JSON.stringify(payload)
+      });
+      if (res.ok) {
+        alert('Settings saved successfully!');
+        if (isFormData) loadAdminSettings();
+      } else {
+        const error = await res.json().catch(() => ({}));
+        alert(error.message || 'Failed to save settings');
+      }
+    }
+
     function toggleImageInput(option) {
       if (option === 'url') {
         document.getElementById('urlInputContainer').classList.remove('hidden');
@@ -372,7 +412,6 @@
       document.getElementById('pTips').value = p.tips || '';
       document.getElementById('modalTitle').innerText = 'Edit Attraction';
 
-      // Check if current image is an uploaded file vs URL
       if (p.image && p.image.startsWith('/uploads/')) {
         document.querySelector('input[name="imageOption"][value="file"]').checked = true;
         toggleImageInput('file');
@@ -422,7 +461,7 @@
         closeModal();
         fetchAdminPlaces();
       } else {
-        alert('Failed to save attraction. Check server logs.');
+        alert('Failed to save attraction');
       }
     });
 
@@ -450,13 +489,16 @@
     }
 
     function logout() {
-      if (confirm("Are you sure you want to log out of the admin panel?")) {
+      if (confirm("Are you sure you want to log out?")) {
         localStorage.removeItem('adminToken');
         window.location.href = '/admin/login.html';
       }
     }
 
-    window.addEventListener('DOMContentLoaded', fetchAdminPlaces);
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchAdminPlaces();
+      loadAdminSettings();
+    });
   </script>
 </body>
 </html>
