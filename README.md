@@ -92,7 +92,7 @@ katunayake-tourist-system/
 │   ├── routes/places.js          # GET /api/places, /api/places/:id
 │   ├── .env                      # Environment config
 │   ├── package.json
-│   ├── schema.sql                # Database and table definition
+│   ├── schema.sql                # Database, places, users, and site settings tables
 │   ├── seed.js                   # Creates schema and loads places.json
 │   └── server.js                 # Express server
 ├── frontend/
@@ -161,7 +161,8 @@ DB_NAME=katunayake_tourism
 - The schema enforces `distance_km <= 25`.
 - Itinerary times assume 20 minutes of travel between stops (`TRAVEL_MIN` in `visitPlanBuilder.html`).
 - Plans are stored in each visitor's own browser and are not shared between devices.
-- The `Admin` folder is reserved for a future dashboard to add and edit places.
+- The `Admin` dashboard supports adding and editing places and public site settings.
+- Administrators can edit the public header and footer from `/admin/dashboard.html`.
 
 ---
 
